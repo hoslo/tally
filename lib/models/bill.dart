@@ -1,18 +1,16 @@
-import 'package:const_date_time/const_date_time.dart';
-
 class Bill {
   String note;
   double amount;
   String icon;
-  DateTime createdAt;
-  DateTime updatedAt;
+  int createdAt;
+  int updatedAt;
 
   Bill({
     this.icon = "",
     this.note = "",
     this.amount = 0,
-    this.createdAt = const ConstDateTime(0),
-    this.updatedAt = const ConstDateTime(0),
+    this.createdAt = 0,
+    this.updatedAt = 0,
   });
 
   // Convert a Dog into a Map. The keys must correspond to the names of the
@@ -22,6 +20,8 @@ class Bill {
       'note': note,
       'amount': amount,
       'icon': icon,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
     };
   }
 
@@ -31,8 +31,8 @@ class Bill {
       icon: map['icon'],
       note: map['note'],
       amount: map['amount'],
-      createdAt: DateTime.parse(map['created_at']),
-      updatedAt: DateTime.parse(map['updated_at']),
+      createdAt: map['created_at'],
+      updatedAt: map['updated_at'],
     );
   }
 
@@ -41,8 +41,8 @@ class Bill {
     String? note,
     double? amount,
     String? icon,
-    DateTime? createdAt,
-    DateTime? updatedAt,
+    int? createdAt,
+    int? updatedAt,
   }) {
     return Bill(
       note: note ?? this.note,

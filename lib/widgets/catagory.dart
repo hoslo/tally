@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tally/providers/bill.dart';
+import 'package:tally/themes/light.dart';
 
 class Category extends ConsumerStatefulWidget {
   const Category({super.key});
@@ -62,8 +63,8 @@ class _CategoryState extends ConsumerState<Category> {
                     border: Border.all(
                         width: 1.w,
                         color: _selectIndex == index
-                            ? const Color(0xff5986F2)
-                            : const Color(0xffD9D9D9)),
+                            ? LightTheme.lightBlue
+                            : LightTheme.silverMist),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -72,8 +73,8 @@ class _CategoryState extends ConsumerState<Category> {
                         Category.list[index]["icon"]!,
                         colorFilter: ColorFilter.mode(
                             _selectIndex == index
-                                ? const Color(0xff5986F2)
-                                : const Color(0xff333333),
+                                ? LightTheme.lightBlue
+                                : LightTheme.darkBlack,
                             BlendMode.srcIn),
                       ),
                       SizedBox(
@@ -85,8 +86,8 @@ class _CategoryState extends ConsumerState<Category> {
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w400,
                             color: _selectIndex == index
-                                ? const Color(0xff5986F2)
-                                : const Color(0xff333333)),
+                                ? LightTheme.lightBlue
+                                : LightTheme.darkBlack),
                       )
                     ],
                   )),

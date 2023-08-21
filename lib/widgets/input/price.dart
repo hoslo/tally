@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tally/providers/bill.dart';
+import 'package:tally/themes/light.dart';
 
 class PriceInput extends ConsumerWidget {
   const PriceInput({super.key});
@@ -20,7 +21,7 @@ class PriceInput extends ConsumerWidget {
               child: Text(
                 "费用",
                 style: TextStyle(
-                  color: const Color(0xffA6A6A6),
+                  color: LightTheme.lightGray,
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w400,
                 ),
@@ -43,15 +44,16 @@ class PriceInput extends ConsumerWidget {
                       width: 44.w,
                       height: 56.h,
                       decoration: BoxDecoration(
-                        color: const Color(0xffF5F5F5),
+                        color: LightTheme.lightGreyWhite,
                         border: const Border(
-                            right:
-                                BorderSide(color: Color(0xffD9D9D9), width: 0),
-                            left:
-                                BorderSide(color: Color(0xffD9D9D9), width: 1),
-                            top: BorderSide(color: Color(0xffD9D9D9), width: 1),
-                            bottom:
-                                BorderSide(color: Color(0xffD9D9D9), width: 1)),
+                            right: BorderSide(
+                                color: LightTheme.silverMist, width: 0),
+                            left: BorderSide(
+                                color: LightTheme.silverMist, width: 1),
+                            top: BorderSide(
+                                color: LightTheme.silverMist, width: 1),
+                            bottom: BorderSide(
+                                color: LightTheme.silverMist, width: 1)),
                         borderRadius: BorderRadius.only(
                                 topLeft: const Radius.circular(8).w,
                                 bottomLeft: const Radius.circular(8).w)
@@ -61,7 +63,7 @@ class PriceInput extends ConsumerWidget {
                         child: Text("¥",
                             style: TextStyle(
                               fontSize: 32.sp,
-                              color: const Color(0xff404040),
+                              color: LightTheme.charcoalGrey,
                               fontWeight: FontWeight.w400,
                             )),
                       )),
@@ -69,7 +71,8 @@ class PriceInput extends ConsumerWidget {
                     width: 338.w,
                     height: 56.h,
                     child: TextField(
-                      style: TextStyle(fontSize: 32.sp),
+                      style: TextStyle(
+                          fontSize: 32.sp, color: LightTheme.darkBlack),
                       keyboardType: const TextInputType.numberWithOptions(
                           decimal: true, signed: false),
                       inputFormatters: <TextInputFormatter>[
@@ -87,7 +90,7 @@ class PriceInput extends ConsumerWidget {
                             const EdgeInsets.fromLTRB(10, 0, 0, 10).w,
                         enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                              color: Color(0xffD9D9D9),
+                              color: LightTheme.silverMist,
                             ),
                             borderRadius: BorderRadius.only(
                                 topRight: const Radius.circular(8).w,
@@ -97,13 +100,12 @@ class PriceInput extends ConsumerWidget {
                               topRight: const Radius.circular(8).w,
                               bottomRight: const Radius.circular(8).w),
                           borderSide: const BorderSide(
-                            color: Color(0xffD9D9D9),
+                            color: LightTheme.silverMist,
                           ),
                         ),
                         hintText: '0.00',
-                        
                         hintStyle: TextStyle(
-                            fontSize: 32.sp, color: const Color(0xffD9D9D9)),
+                            fontSize: 32.sp, color: LightTheme.silverMist),
                       ),
                     ),
                   ),

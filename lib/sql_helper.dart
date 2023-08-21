@@ -11,9 +11,9 @@ class DatabaseHelper {
             `amount` REAL NOT NULL,  -- 金额
             `note` CHAR(255) NOT NULL,  -- 备注
             `icon` CHAR(255) NOT NULL,  -- 图标
-            `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-            `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-            `deleted_at` DATETIME NULL DEFAULT NULL
+            `created_at` INTEGER NOT NULL,
+            `updated_at` INTEGER NOT NULL,
+            `deleted_at` INTEGER DEFAULT NULL
         );
     """);
     await database.execute("""
@@ -25,7 +25,7 @@ class DatabaseHelper {
 // created_at: the time that the item was created. It will be automatically handled by SQLite
 
   static Future<sql.Database> db() async {
-    const path = 'assets/database/tally.db';
+    final path = join(await getDatabasesPath(), "tally.db");
     print('database path: $path');
     return sql.openDatabase(
       path,
@@ -39,15 +39,14 @@ class DatabaseHelper {
   // Create new bill
   static Future<int> createBill(Bill bill) async {
     final db = await DatabaseHelper.db();
-
+    bill.createdAt = DateTime.now().microsecondsSinceEpoch;
+    bill.updatedAt = DateTime.now().microsecondsSinceEpoch;
     final data = bill.toMap();
-    print('data: $data');
     final id = await db.insert(
       'bills',
       data,
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    print('id: $id');
     return id;
   }
 
@@ -58,9 +57,8 @@ class DatabaseHelper {
     final maps = await db.query(
       'bills',
       where: "created_at >= ? and created_at <= ?",
-      whereArgs: [start.toIso8601String(), end.toIso8601String()],
+      whereArgs: [start.microsecondsSinceEpoch, end.microsecondsSinceEpoch],
     );
-    print('maps: $maps');
     return List.generate(maps.length, (i) {
       return Bill.fromMap(maps[i]);
     });

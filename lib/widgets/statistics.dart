@@ -1,82 +1,89 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tally/common/time.dart';
 import 'package:tally/models/bill.dart';
+import 'package:tally/providers/statistics.dart';
 import 'package:tally/sql_helper.dart';
+import 'package:tally/themes/light.dart';
 
-class Statistics extends StatefulWidget {
-  final DateTime start;
-  final DateTime end;
+// ignore: must_be_immutable
+class Statistics extends ConsumerWidget {
+  late Future<List<Bill>> bills;
 
-  const Statistics({super.key, required this.start, required this.end});
+  Statistics({super.key});
 
-  @override
-  State<Statistics> createState() => _StatisticsState();
-}
-
-class _StatisticsState extends State<Statistics> {
-  List<Bill> bills = [];
-
-  void getBills() async {
-    await DatabaseHelper.getBillsByCreatedAt(widget.start, widget.end)
-        .then((value) => {
-              setState(() {
-                bills = value;
-              })
-            });
+  void getBills(start, end) async {
+    bills = DatabaseHelper.getBillsByCreatedAt(start, end);
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getBills();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-        itemExtent: 48.h,
-        itemCount: bills.length,
-        itemBuilder: (context, index) {
-          return Container(
-            padding: EdgeInsets.only(
-                left: 16.w, right: 16.w, top: 12.h, bottom: 12.h),
-            height: 48.h,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      SvgPicture.asset(
-                        bills[index].icon,
-                        width: 24.w,
-                        height: 24.h,
-                      ),
-                      SizedBox(
-                        width: 11.w,
-                      ),
-                      Text(
-                        bills[index].note,
-                        style: TextStyle(
-                            fontSize: 16.sp,
-                            color: const Color(0xff404040),
-                            fontWeight: FontWeight.w400),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    width: 103.w,
-                  ),
-                  Text(
-                    "-¥ ${bills[index].amount}",
-                    style: TextStyle(
-                        fontSize: 16.sp,
-                        color: const Color(0xffFF9A9A),
-                        fontWeight: FontWeight.w400),
-                  ),
-                ]),
-          );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final String type = ref.watch(statisticTypeProvider);
+    final DateTime now = ref.watch(timeProvider);
+    if (type == "月统计") {
+      final start = getMonthStart(now);
+      final end = getMonthEnd(now);
+      getBills(start, end);
+    } else if (type == "周统计") {
+      final start = getWeekStart(now);
+      final end = getWeekEnd(now);
+      getBills(start, end);
+    }
+    return FutureBuilder<List<Bill>>(
+        future: bills,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final data = snapshot.data!;
+            return ListView.builder(
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    padding: EdgeInsets.only(
+                        left: 16.w, right: 16.w, top: 12.h, bottom: 12.h),
+                    height: 48.h,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              SvgPicture.asset(
+                                data[index].icon,
+                                width: 24.w,
+                                height: 24.h,
+                                colorFilter: const ColorFilter.mode(LightTheme.charcoalGrey, BlendMode.srcIn),
+                              ),
+                              SizedBox(
+                                width: 11.w,
+                              ),
+                              Text(
+                                data[index].note,
+                                style: TextStyle(
+                                    fontSize: 16.sp,
+                                    color: LightTheme.charcoalGrey,
+                                    fontWeight: FontWeight.w400),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            width: 103.w,
+                          ),
+                          Text(
+                            "-¥ ${data[index].amount}",
+                            style: TextStyle(
+                                fontSize: 16.sp,
+                                color: LightTheme.roseBlush,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ]),
+                  );
+                });
+          }
+          if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+          return const CircularProgressIndicator();
         });
   }
 }

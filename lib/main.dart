@@ -3,10 +3,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tally/screens/expend.dart';
+import 'package:tally/screens/setting.dart';
 import 'package:tally/screens/statistics.dart';
 import 'package:tally/sql_helper.dart';
+import 'package:tally/themes/light.dart';
 import 'package:tally/widgets/bars/expend.dart';
 import 'package:tally/widgets/bars/statistics.dart';
+import 'package:themed/themed.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,17 +32,17 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return MaterialApp(
+        return Themed(
+            child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'First Method',
           // You can use the library anywhere in the app even in theme
           theme: ThemeData(
-            colorScheme:
-                ColorScheme.fromSeed(seedColor: const Color(0xFF5986F2)),
+            colorScheme: ColorScheme.fromSeed(seedColor: LightTheme.lightBlue),
             useMaterial3: true,
           ),
           home: child,
-        );
+        ));
       },
       child: const HomePage(title: 'First Method'),
     );
@@ -68,12 +71,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   static final List<Widget> _pages = [
     ExpendScreen(),
     const StatisticsScreen(),
-    const Text('设置')
+    const SettingScreen()
   ];
   static final List<PreferredSizeWidget> _appBars = [
     const ExpendAppBar(),
     const StatisticsAppBar(),
-    AppBar(title: const Text('设置'))
+    AppBar(title: Text('设置', style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w400,
+                      color: LightTheme.darkBlack)))
   ];
   int _selectIndex = 0;
 
@@ -89,47 +95,51 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
+        backgroundColor: LightTheme.primaryColor,
         resizeToAvoidBottomInset: false,
         appBar: _appBars.elementAt(_selectIndex),
         body: _pages.elementAt(_selectIndex),
         bottomNavigationBar: Container(
           decoration: const BoxDecoration(
             border: Border(
-              top: BorderSide(color: Color(0xffD9D9D9), width: 1),
+              top: BorderSide(color: LightTheme.silverMist, width: 1),
             ),
           ),
           child: BottomNavigationBar(
+              backgroundColor: LightTheme.primaryColor,
               currentIndex: _selectIndex,
               onTap: (index) {
                 setState(() {
                   _selectIndex = index;
                 });
               },
-              selectedItemColor: const Color(0xff5986F2),
+              selectedItemColor: LightTheme.lightBlue,
+              unselectedItemColor: LightTheme.charcoalGrey,
               type: BottomNavigationBarType.fixed,
               items: [
                 BottomNavigationBarItem(
+                    
                     icon: SvgPicture.asset("assets/icons/Input.svg",
                         colorFilter: ColorFilter.mode(
                             _selectIndex == 0
-                                ? const Color(0xff5986F2)
-                                : const Color(0xff333333),
+                                ? LightTheme.lightBlue
+                                : LightTheme.darkBlack,
                             BlendMode.srcIn)),
                     label: "录入"),
                 BottomNavigationBarItem(
                     icon: SvgPicture.asset("assets/icons/Report.svg",
                         colorFilter: ColorFilter.mode(
                             _selectIndex == 1
-                                ? const Color(0xff5986F2)
-                                : const Color(0xff333333),
+                                ? LightTheme.lightBlue
+                                : LightTheme.darkBlack,
                             BlendMode.srcIn)),
                     label: "统计"),
                 BottomNavigationBarItem(
                     icon: SvgPicture.asset("assets/icons/Settings.svg",
                         colorFilter: ColorFilter.mode(
                             _selectIndex == 2
-                                ? const Color(0xff5986F2)
-                                : const Color(0xff333333),
+                                ? LightTheme.lightBlue
+                                : LightTheme.darkBlack,
                             BlendMode.srcIn)),
                     label: "设置"),
               ]),

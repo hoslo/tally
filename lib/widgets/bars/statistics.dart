@@ -3,8 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tally/providers/statistics.dart';
+import 'package:tally/themes/light.dart';
 
-class StatisticsAppBar extends ConsumerStatefulWidget implements PreferredSizeWidget {
+class StatisticsAppBar extends ConsumerStatefulWidget
+    implements PreferredSizeWidget {
   const StatisticsAppBar({super.key});
 
   @override
@@ -20,12 +22,13 @@ class _StatisticsAppBarState extends ConsumerState<StatisticsAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      backgroundColor: LightTheme.primaryColor,
       titleSpacing: 0,
       title: DropdownButton(
         underline: Container(),
         icon: SvgPicture.asset('assets/icons/CaretDown.svg'),
-        focusColor: const Color(0xff333333),
-        iconEnabledColor: const Color(0xff333333),
+        focusColor: LightTheme.darkBlack,
+        iconEnabledColor: LightTheme.darkBlack,
         value: _value,
         padding: EdgeInsets.only(right: 8.w),
         isExpanded: true,
@@ -38,7 +41,7 @@ class _StatisticsAppBarState extends ConsumerState<StatisticsAppBar> {
                   style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w400,
-                      color: const Color(0xff333333))),
+                      color: LightTheme.darkBlack)),
             ),
           ),
           DropdownMenuItem(
@@ -49,7 +52,7 @@ class _StatisticsAppBarState extends ConsumerState<StatisticsAppBar> {
                   style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w400,
-                      color: const Color(0xff333333)),
+                      color: LightTheme.darkBlack),
                 ),
               )),
         ],
