@@ -42,6 +42,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   intl: ^0.18.1
   themed: ^4.0.0
+  rust_in_flutter: ^2.8.5
+  msgpack_dart: ^1.0.1
 
 
 dev_dependencies:
