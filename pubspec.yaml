@@ -42,6 +42,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   intl: ^0.18.1
   themed: ^4.0.0
+  # rust_in_flutter: ^2.8.5
+  msgpack_dart: ^1.0.1
 
 
 dev_dependencies:
@@ -53,7 +55,15 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
+  flutter_launcher_icons: "^0.13.1"
   flutter_lints: ^2.0.0
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/launch/tally.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -69,6 +79,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
       - assets/icons/
+      - assets/icons/launch/tally.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

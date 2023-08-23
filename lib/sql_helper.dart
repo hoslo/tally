@@ -26,7 +26,6 @@ class DatabaseHelper {
 
   static Future<sql.Database> db() async {
     final path = join(await getDatabasesPath(), "tally.db");
-    print('database path: $path');
     return sql.openDatabase(
       path,
       version: 1,

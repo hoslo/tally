@@ -7,6 +7,9 @@ import 'package:tally/models/bill.dart';
 import 'package:tally/providers/statistics.dart';
 import 'package:tally/sql_helper.dart';
 import 'package:tally/themes/light.dart';
+import 'package:tally/widgets/item.dart';
+
+final totalExpendProvide = StateProvider<double>((ref) => 0.0);
 
 // ignore: must_be_immutable
 class Statistics extends ConsumerWidget {
@@ -16,6 +19,11 @@ class Statistics extends ConsumerWidget {
 
   void getBills(start, end) async {
     bills = DatabaseHelper.getBillsByCreatedAt(start, end);
+  }
+
+  void updateTotol(List<Bill> bills, WidgetRef ref) {
+    ref.read(totalExpendProvide.notifier).state =
+        bills.map((e) => e.amount).reduce((value, element) => value += element);
   }
 
   @override
@@ -36,48 +44,15 @@ class Statistics extends ConsumerWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final data = snapshot.data!;
+            if (data.isNotEmpty) {
+              Future.delayed(Duration.zero, () {
+                updateTotol(data, ref);
+              });
+            }
             return ListView.builder(
                 itemCount: data.length,
                 itemBuilder: (context, index) {
-                  return Container(
-                    padding: EdgeInsets.only(
-                        left: 16.w, right: 16.w, top: 12.h, bottom: 12.h),
-                    height: 48.h,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                data[index].icon,
-                                width: 24.w,
-                                height: 24.h,
-                                colorFilter: const ColorFilter.mode(LightTheme.charcoalGrey, BlendMode.srcIn),
-                              ),
-                              SizedBox(
-                                width: 11.w,
-                              ),
-                              Text(
-                                data[index].note,
-                                style: TextStyle(
-                                    fontSize: 16.sp,
-                                    color: LightTheme.charcoalGrey,
-                                    fontWeight: FontWeight.w400),
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            width: 103.w,
-                          ),
-                          Text(
-                            "-¥ ${data[index].amount}",
-                            style: TextStyle(
-                                fontSize: 16.sp,
-                                color: LightTheme.roseBlush,
-                                fontWeight: FontWeight.w400),
-                          ),
-                        ]),
-                  );
+                  return Item(data[index]);
                 });
           }
           if (snapshot.hasError) {
