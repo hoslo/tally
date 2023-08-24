@@ -5,6 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tally/providers/bill.dart';
 import 'package:tally/themes/light.dart';
 
+final categoryProvider = StateProvider<int>((ref) => -1);
+
 class Category extends ConsumerStatefulWidget {
   const Category({super.key});
 
@@ -36,10 +38,10 @@ class Category extends ConsumerStatefulWidget {
 }
 
 class _CategoryState extends ConsumerState<Category> {
-  int _selectIndex = -1;
 
   @override
   Widget build(BuildContext context) {
+    int selectIndex = ref.watch(categoryProvider);
     return SizedBox(
         width: 382.w,
         height: 283.h,
@@ -49,7 +51,7 @@ class _CategoryState extends ConsumerState<Category> {
             return GestureDetector(
               onTap: () {
                 setState(() {
-                  _selectIndex = index;
+                  ref.read(categoryProvider.notifier).state = index;
                   ref.read(billProvider.notifier).setIcon(
                         Category.list[index]["icon"]!,
                       );
@@ -62,7 +64,7 @@ class _CategoryState extends ConsumerState<Category> {
                     borderRadius: const BorderRadius.all(Radius.circular(4)).w,
                     border: Border.all(
                         width: 1.w,
-                        color: _selectIndex == index
+                        color: selectIndex == index
                             ? LightTheme.lightBlue
                             : LightTheme.silverMist),
                   ),
@@ -72,7 +74,7 @@ class _CategoryState extends ConsumerState<Category> {
                       SvgPicture.asset(
                         Category.list[index]["icon"]!,
                         colorFilter: ColorFilter.mode(
-                            _selectIndex == index
+                            selectIndex == index
                                 ? LightTheme.lightBlue
                                 : LightTheme.darkBlack,
                             BlendMode.srcIn),
@@ -85,7 +87,7 @@ class _CategoryState extends ConsumerState<Category> {
                         style: TextStyle(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w400,
-                            color: _selectIndex == index
+                            color: selectIndex == index
                                 ? LightTheme.lightBlue
                                 : LightTheme.darkBlack),
                       )

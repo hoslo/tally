@@ -4,11 +4,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tally/providers/bill.dart';
 import 'package:tally/themes/light.dart';
 
+final noteInputController = Provider<TextEditingController>((ref) {
+  return TextEditingController();
+});
+
 class NoteInput extends ConsumerWidget {
   const NoteInput({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final controller = ref.watch(noteInputController);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -35,6 +40,7 @@ class NoteInput extends ConsumerWidget {
           width: 382.w,
           height: 48.h,
           child: TextField(
+            controller: controller,
             onChanged: (value) {
               ref.read(billProvider.notifier).setNote(value);
             },

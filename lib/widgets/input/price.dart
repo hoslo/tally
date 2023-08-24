@@ -5,11 +5,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tally/providers/bill.dart';
 import 'package:tally/themes/light.dart';
 
+final priceInputController = Provider<TextEditingController>((ref) {
+  return TextEditingController();
+});
+
 class PriceInput extends ConsumerWidget {
   const PriceInput({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final controller = ref.watch(priceInputController);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -71,18 +76,21 @@ class PriceInput extends ConsumerWidget {
                     width: 338.w,
                     height: 56.h,
                     child: TextField(
+                      controller: controller,
                       style: TextStyle(
                           fontSize: 32.sp, color: LightTheme.darkBlack),
                       keyboardType: const TextInputType.numberWithOptions(
                           decimal: true, signed: false),
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.allow(
-                            RegExp(r'^[0-9]+.?[0-9]*')),
+                            RegExp(r'(^[0-9]+.?[0-9]*)|^$')),
                       ],
                       onChanged: (value) {
-                        ref
-                            .read(billProvider.notifier)
-                            .setAmount(double.parse(value));
+                        if (value != "") {
+                          ref
+                              .read(billProvider.notifier)
+                              .setAmount(double.parse(value));
+                        }
                       },
                       textAlignVertical: TextAlignVertical.center,
                       decoration: InputDecoration(

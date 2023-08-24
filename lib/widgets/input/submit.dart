@@ -5,6 +5,9 @@ import 'package:tally/models/bill.dart';
 import 'package:tally/providers/bill.dart';
 import 'package:tally/sql_helper.dart';
 import 'package:tally/themes/light.dart';
+import 'package:tally/widgets/catagory.dart';
+import 'package:tally/widgets/input/note.dart';
+import 'package:tally/widgets/input/price.dart';
 
 class Submit extends ConsumerStatefulWidget {
   const Submit({super.key});
@@ -27,14 +30,23 @@ class _SubmitState extends ConsumerState<Submit> {
               ? LightTheme.lightBlue
               : LightTheme.silverMist),
       child: TextButton(
-          onPressed: () async {
+          onPressed: (ref.watch(billProvider).icon != "" &&
+                  ref.watch(billProvider).note != "" &&
+                  ref.watch(billProvider).amount != 0) ? () async {
             final amount = ref.read(billProvider).amount;
             final note = ref.read(billProvider).note;
             final icon = ref.read(billProvider).icon;
 
             DatabaseHelper.createBill(
                 Bill(amount: amount, note: note, icon: icon));
-          },
+
+            ref.read(billProvider.notifier).setAmount(0);
+            ref.read(billProvider.notifier).setNote("");
+            ref.read(billProvider.notifier).setIcon("");
+            ref.read(priceInputController).clear();
+            ref.read(noteInputController).clear();
+            ref.read(categoryProvider.notifier).state = -1;
+          } : null,
           child: Center(
             child: Text("提交",
                 style: TextStyle(

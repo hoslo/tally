@@ -10,10 +10,10 @@ import 'package:tally/themes/light.dart';
 import 'package:tally/widgets/bars/expend.dart';
 import 'package:tally/widgets/bars/statistics.dart';
 import 'package:themed/themed.dart';
-import 'package:rust_in_flutter/rust_in_flutter.dart';
+// import 'package:rust_in_flutter/rust_in_flutter.dart';
 
 void main() async {
-  await RustInFlutter.ensureInitialized();
+  // await RustInFlutter.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
   // Open the database and store the reference.
   final db = await DatabaseHelper.db();
@@ -27,15 +27,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final w = 414 / ScreenUtil().pixelRatio!;
-    final h = 896 / ScreenUtil().pixelRatio!;
-    return ScreenUtilInit(
-      designSize: Size(w, h),
+    // final w = 414 / ScreenUtil().pixelRatio!;
+    // final h = 896 / ScreenUtil().pixelRatio!;
+    return Themed(
+        child: ScreenUtilInit(
+      designSize: const Size(414, 896),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return Themed(
-            child: MaterialApp(
+        return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'First Method',
           // You can use the library anywhere in the app even in theme
@@ -44,10 +44,10 @@ class MyApp extends StatelessWidget {
             useMaterial3: true,
           ),
           home: child,
-        ));
+        );
       },
       child: const HomePage(title: 'First Method'),
-    );
+    ));
   }
 }
 

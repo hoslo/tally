@@ -47,7 +47,7 @@ class StatisticsScreen extends ConsumerWidget {
               Container(
                 padding: EdgeInsets.only(right: 15.w),
                 child: Text(
-                  '¥ 0.00',
+                  '¥ ${ref.watch(totalExpendProvide)}',
                   style: TextStyle(
                     color: LightTheme.lightBlue,
                     fontSize: 16.sp,
