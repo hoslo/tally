@@ -1,0 +1,10 @@
+syntax = "proto3";
+package counter_number;
+
+message ReadRequest {
+  int32 before_number = 2;
+}
+
+message ReadResponse {
+  int32 after_number = 1;
+}

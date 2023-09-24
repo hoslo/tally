@@ -44,6 +44,8 @@ dependencies:
   themed: ^4.0.0
   # rust_in_flutter: ^2.8.5
   msgpack_dart: ^1.0.1
+  rust_in_flutter: ^4.4.0
+  protobuf: ^3.1.0
 
 
 dev_dependencies:
